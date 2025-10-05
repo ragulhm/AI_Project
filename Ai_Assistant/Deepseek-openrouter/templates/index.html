@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek-v3 AI Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="chat-header">
+            <h1>DeepSeek-v3 Assistant</h1>
+            <p>Powered by OpenRouter</p>
+        </header>
+        
+        <main id="chat-messages" class="chat-messages">
+            <!-- Initial Message -->
+            <div class="message assistant-message">
+                <div class="message-content">Hello! How can I assist you professionally today?</div>
+                <div class="message-meta">AI Assistant</div>
+            </div>
+        </main>
+        
+        <footer class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message here..." autofocus>
+            <button id="send-button" onclick="sendMessage()">Send</button>
+        </footer>
+    </div>
+
+    <!-- Loading Spinner (initially hidden) -->
+    <div id="loading-spinner" class="spinner-overlay" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="/static/chat.js"></script>
+</body>
+</html>

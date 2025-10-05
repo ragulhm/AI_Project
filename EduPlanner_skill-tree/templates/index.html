@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EduPlanner Skill Tree</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { padding: 10px; margin: 5px; }
+        .skill { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 6px; }
+        .milestone { margin-left: 20px; margin-bottom: 5px; }
+        a { color: blue; text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>EduPlanner Skill Tree Generator</h1>
+    <input type="text" id="domain" placeholder="Enter a domain (e.g., Web Development)">
+    <button onclick="generateSkillTree()">Generate Skill Tree</button>
+
+    <div id="output"></div>
+
+    <script>
+        async function generateSkillTree() {
+            const domain = document.getElementById("domain").value.trim();
+            if (!domain) return alert("Please enter a domain");
+
+            const response = await fetch("/generate_skill_tree", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ domain })
+            });
+
+            const data = await response.json();
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = "";
+
+            if (data.error) {
+                outputDiv.innerHTML = `<p style="color:red">${data.error}</p>`;
+                return;
+            }
+
+            // Render JSON as HTML
+            const skillTree = data;
+            outputDiv.innerHTML += `<h2>${skillTree.domain}</h2>`;
+            skillTree.primary_skills.forEach(skill => {
+                const skillDiv = document.createElement("div");
+                skillDiv.className = "skill";
+                skillDiv.innerHTML = `<h3>${skill.name} (${skill.estimated_hours} hrs)</h3>
+                                      <p>${skill.description}</p>`;
+                
+                skill.milestones.forEach(m => {
+                    const milestoneDiv = document.createElement("div");
+                    milestoneDiv.className = "milestone";
+                    milestoneDiv.innerHTML = `<strong>${m.name} (${m.estimated_hours} hrs)</strong>: ${m.target} <br>`;
+                    m.resources.forEach(r => {
+                        milestoneDiv.innerHTML += `<a href="${r.url}" target="_blank">${r.title}</a><br>`;
+                    });
+                    skillDiv.appendChild(milestoneDiv);
+                });
+
+                outputDiv.appendChild(skillDiv);
+            });
+        }
+    </script>
+</body>
+</html>

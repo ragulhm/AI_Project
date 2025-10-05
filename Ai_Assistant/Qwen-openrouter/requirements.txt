@@ -1,0 +1,6 @@
+flask
+openai
+
+python-dotenv
+# Recommended for production deployment
+gunicorn

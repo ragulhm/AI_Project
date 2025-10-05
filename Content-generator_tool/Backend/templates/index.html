@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Content Generator</title>
+  <style>
+    body { font-family: Arial; max-width: 700px; margin: auto; padding: 30px; background: #f8f9fa; }
+    h1 { text-align: center; }
+    textarea, button { width: 100%; padding: 15px; margin-top: 15px; border-radius: 6px; font-size: 16px; }
+    button { background: #4caf50; color: white; border: none; cursor: pointer; }
+    button:hover { background: #45a049; }
+    #output { margin-top: 20px; padding: 20px; border-radius: 6px; background: #fff; border: 1px solid #ddd; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>AI Content Generator</h1>
+  <textarea id="prompt" rows="5" placeholder="Enter a topic or prompt..."></textarea>
+  <button id="generateBtn">Generate Content</button>
+  <div id="output"></div>
+
+  <script>
+    const btn = document.getElementById('generateBtn');
+    const promptInput = document.getElementById('prompt');
+    const output = document.getElementById('output');
+
+    btn.addEventListener('click', async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) { alert("Please enter a prompt."); return; }
+      output.textContent = "Generating content...";
+      try {
+        const res = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        output.textContent = data.result || data.error;
+      } catch (err) {
+        output.textContent = "Error: " + err;
+      }
+    });
+  </script>
+</body>
+</html>
